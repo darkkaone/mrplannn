@@ -206,6 +206,7 @@ class _AppbarState extends State<Appbar> {
                                 await DatabaseService().createNewTodo(todoTitleController.text.trim());
                                 FocusScope.of(context).unfocus();
                         anadir(context);
+                        todoTitleController.clear();
                           isComplet = !isComplet;
 
 
