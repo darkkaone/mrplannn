@@ -31,8 +31,13 @@ Tareas(),
 // Barradetareas(),
 
         Container(
-          
-      color: Colors.white,
+      decoration: BoxDecoration(
+        boxShadow: [
+          new BoxShadow(color: Colors.white,
+          offset: Offset(0, 15.0),
+          blurRadius: 20.0)],
+        color: Colors.white,
+      ),
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height * 0.3,
           alignment: Alignment.topCenter,
