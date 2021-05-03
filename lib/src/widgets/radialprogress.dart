@@ -1,8 +1,6 @@
 import 'dart:math';
 import 'package:countup/countup.dart';
 import 'package:flutter/material.dart';
-import 'package:mrplan/src/functions/add.dart';
-import 'package:mrplan/src/models/todo.dart';
 import 'package:mrplan/src/pages/graficas_circulares_page.dart';
 import 'package:mrplan/src/pages/todolist.dart';
 import 'package:mrplan/src/widgets/appbar.dart';

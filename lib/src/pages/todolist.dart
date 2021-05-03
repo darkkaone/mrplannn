@@ -16,7 +16,6 @@ class Todolist extends StatefulWidget {
 
 class _TodolistState extends State<Todolist> {
 
-double porcentajeq;
 
       bool isComplet = false;
 
@@ -68,6 +67,7 @@ if(todos.length == 0){
                         onDismissed: (direction) async {
                           await DatabaseService().removeTodo(todos[index].uid);
                         quitar(context);
+                        
                         },
                         
                         child: ListTile(
@@ -206,6 +206,7 @@ class _AppbarState extends State<Appbar> {
                                 await DatabaseService().createNewTodo(todoTitleController.text.trim());
                                 FocusScope.of(context).unfocus();
                         anadir(context);
+                        
                         todoTitleController.clear();
                           isComplet = !isComplet;
 
