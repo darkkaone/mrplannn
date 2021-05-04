@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:countup/countup.dart';
 import 'package:flutter/material.dart';
 import 'package:mrplan/src/pages/graficas_circulares_page.dart';
@@ -29,7 +30,7 @@ class RadialProgress extends StatefulWidget {
 class _RadialProgressState extends State<RadialProgress> with SingleTickerProviderStateMixin{
 
   AnimationController controller;
-  double porcentajeanterior;
+  dynamic porcentajeanterior;
   
 
   @override
@@ -58,7 +59,7 @@ class _RadialProgressState extends State<RadialProgress> with SingleTickerProvid
 
 
 
-    final diferenciaAnimar = porcentaje - porcentajeanterior;
+    
     porcentajeanterior = porcentaje;
     
 
@@ -73,15 +74,22 @@ class _RadialProgressState extends State<RadialProgress> with SingleTickerProvid
             height: 150,
             child: Center(child: Container(alignment: Alignment.center, width: 40,
             height: 25,
-              child: Countup(
-              begin: (porcentaje - diferenciaAnimar),
-              end: porcentaje,
-              duration: Duration(milliseconds: 200),
-              separator: ',',
-              style: TextStyle(
-                fontSize: 20,
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection('Percent').snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return SizedBox();
+                  final diferenciaAnimar = porcentaje - porcentajeanterior;
+                  return Countup(
+                  begin: (snapshot.data.docs[0]['value'] - diferenciaAnimar).toDouble(),
+                  end: snapshot.data.docs[0]['value'].toDouble(),
+                  duration: Duration(milliseconds: 200),
+                  separator: ',',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+            );
+                }
               ),
-            ),
             
               )
               
@@ -93,20 +101,27 @@ class _RadialProgressState extends State<RadialProgress> with SingleTickerProvid
         
         animation: controller,
         builder: (BuildContext context, Widget child) {
-          return Container(
-          padding: EdgeInsets.all(10),
-          width: double.infinity,
-          height: double.infinity,
-          child: CustomPaint(
-            painter: _MiRadialProgress(
-              (porcentaje - diferenciaAnimar) + (diferenciaAnimar * controller.value),
-              widget.colorprimario,
-              widget.colorsecundario,
-              widget.grosorsecundario,
-              widget.grosorprimario)
-            ),
-          // child: Text('${widget.porcentaje}'),
+          return StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance.collection('Percent').snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return SizedBox();
+              final diferenciaAnimar = porcentaje - porcentajeanterior;
+              return Container(
+              padding: EdgeInsets.all(10),
+              width: double.infinity,
+              height: double.infinity,
+              child: CustomPaint(
+                painter: _MiRadialProgress(
+                  (snapshot.data.docs[0]['value'] - diferenciaAnimar) + (diferenciaAnimar * controller.value),
+                  widget.colorprimario,
+                  widget.colorsecundario,
+                  widget.grosorsecundario,
+                  widget.grosorprimario)
+                ),
+              // child: Text('${widget.porcentaje}'),
         );
+            }
+          );
         
          
         },
@@ -213,7 +228,7 @@ TextEditingController todoTitleController = TextEditingController();
                               )
                             ,
                             
-                              ElevatedButton(onPressed: () => anadir(context),
+                              ElevatedButton(onPressed: () => anadir(),
         
         style: ElevatedButton.styleFrom(primary: Colors.blue[500]),
           child: Icon(Icons.add, color: Colors.black,))

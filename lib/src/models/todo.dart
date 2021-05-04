@@ -10,6 +10,6 @@ class Todo{
 }
 
 class Percentage{
-  double percentage;
+  int percentage;
   Percentage({this.percentage});
 }

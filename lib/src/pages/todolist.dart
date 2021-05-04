@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mrplan/loading.dart';
 import 'package:mrplan/services/database_services.dart';
 import 'package:mrplan/src/models/todo.dart';
+import 'package:mrplan/src/pages/graficas_circulares_page.dart';
 import 'package:mrplan/src/widgets/appbar.dart';
 
 
@@ -42,6 +43,7 @@ setState(() {
                
 if(todos.length == 0){
               return Center(child: Text('No hay tareas agregadas!'));
+              
                
             }
 
@@ -66,7 +68,7 @@ if(todos.length == 0){
                         color: Colors.red),
                         onDismissed: (direction) async {
                           await DatabaseService().removeTodo(todos[index].uid);
-                        quitar(context);
+                        quitar();
                         
                         },
                         
@@ -205,7 +207,7 @@ class _AppbarState extends State<Appbar> {
                               if(todoTitleController.text.isNotEmpty){
                                 await DatabaseService().createNewTodo(todoTitleController.text.trim());
                                 FocusScope.of(context).unfocus();
-                        anadir(context);
+                        anadir();
                         
                         todoTitleController.clear();
                           isComplet = !isComplet;

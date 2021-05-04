@@ -22,7 +22,7 @@ class DatabaseService{
 
     await percentcollection.doc('percentage').update({
 
-"value": porcentaje
+"value": porcentaje + 10
     });
   }
     
@@ -31,10 +31,11 @@ class DatabaseService{
     await todosCollection.doc(uid).update({
       "isComplet": true
             });
+            if (porcentaje > 0){
     percentcollection.doc('percentage').update({
 
 "value": porcentaje -= 10
-    });
+    });}else{porcentaje = 0;}
 
   }
   Future uncompletTask(uid) async {
@@ -49,11 +50,12 @@ class DatabaseService{
 
   Future removeTodo(uid) async {
   await todosCollection.doc(uid).delete();
-  await percentcollection.doc('percentage').update({
+  if (porcentaje > 0){
+    percentcollection.doc('percentage').update({
 
-"value": porcentaje -= 10
-    });
-  
+"value": porcentaje - 10
+    });}else{porcentaje = 0;}
+ 
   }
 
   List<Todo> todoFromFirestore(QuerySnapshot snapshot){
@@ -72,20 +74,20 @@ class DatabaseService{
 
   }
 
-   percentagevalue(QuerySnapshot snapshot){
-    if (snapshot != null){
-      return snapshot.docs.map((e){
-        return 
-        Percentage(
-          percentage: e.data()['value']
-        );
+  //  percentagevalue(QuerySnapshot snapshot){
+  //   if (snapshot != null){
+  //     return snapshot.docs.map((e){
+  //       return 
+  //       Percentage(
+  //         percentage: e.data()['value']
+  //       );
 
-      });
-    }else{
-      return null;
-    }
+  //     });
+  //   }else{
+  //     return null;
+  //   }
 
-  }
+  // }
 
   Stream<List<Todo>> listTodos(){
     
@@ -95,6 +97,7 @@ class DatabaseService{
    return todosCollection.snapshots().map(todoFromFirestore);
    
   }
+  
 
   
 }

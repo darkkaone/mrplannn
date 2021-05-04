@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mrplan/services/database_services.dart';
 import 'package:mrplan/src/models/todo.dart';
@@ -18,7 +19,8 @@ class _GraficasCircularesState extends State<GraficasCirculares> {
     
 setState(() {
   
-});  final double valorporcentaje = Percentage().percentage;
+});  
+// final int valorporcentaje = porcentaje;
 
     return Scaffold(
       
@@ -46,7 +48,13 @@ Tareas(),
           height: MediaQuery.of(context).size.height * 0.3,
           alignment: Alignment.topCenter,
           padding: EdgeInsets.only(top: 40),
-          child: CustomRadialProgress(porcentaje: valorporcentaje , color: Colors.blue[800],))
+          child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance.collection('Percent').snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+              return CustomRadialProgress(porcentaje: snapshot.data.docs[0]['value'] , color: Colors.blue[800],);
+            }
+          ))
           ,
       
       ],)
@@ -64,7 +72,7 @@ class CustomRadialProgress extends StatefulWidget {
     @required this.color,
   });
 
-  double porcentaje = Percentage().percentage;
+  dynamic porcentaje = Percentage().percentage;
 
   @override
   _CustomRadialProgressState createState() => _CustomRadialProgressState();
@@ -74,22 +82,28 @@ class _CustomRadialProgressState extends State<CustomRadialProgress> {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-    width: 150.0,
-    height: 150.0,
-    child: RadialProgress(porcentaje: porcentaje,
-    colorprimario: this.widget.color,
-    colorsecundario: Colors.grey[350],
-    grosorsecundario: 4,
-    grosorprimario: 10,),
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('Percent').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return SizedBox();
+        return Container(
+        width: 150.0,
+        height: 150.0,
+        child: RadialProgress(porcentaje: snapshot.data.docs[0]['value'],
+        colorprimario: this.widget.color,
+        colorsecundario: Colors.grey[350],
+        grosorsecundario: 4,
+        grosorprimario: 10,),
+        );
+      }
     );
   }
 }
 
   
   
-  double porcentaje = 0.0;
-  double nuevoPorcentaje = 0.0;
+  dynamic porcentaje = 0;
+  int nuevoPorcentaje = 0;
   int valorinicial = 0;
   int nuevovalorinicial = 0;
 
