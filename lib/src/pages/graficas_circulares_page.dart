@@ -31,32 +31,46 @@ setState(() {
       body: Stack (children: [
 
 
-Tareas(),
+
 
 
 // Barradetareas(),
 
-        Container(
+        Column(
+          children: [
+            Container(
       decoration: BoxDecoration(
-        boxShadow: [
-          new BoxShadow(color: Colors.white,
-          offset: Offset(0, 15.0),
-          blurRadius: 10.0)],
-        color: Colors.white,
+            boxShadow: [
+              new BoxShadow(color: Colors.white,
+              offset: Offset(0, 15.0),
+              blurRadius: 10.0)],
+            color: Colors.white,
       ),
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.3,
-          alignment: Alignment.topCenter,
-          padding: EdgeInsets.only(top: 40),
-          child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('Percent').snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
-              return CustomRadialProgress(porcentaje: snapshot.data.docs[0]['value'] , color: Colors.blue[800],);
-            }
-          ))
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * 0.3,
+              alignment: Alignment.topCenter,
+              padding: EdgeInsets.only(top: 40),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection('Percent').snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+                  return CustomRadialProgress(porcentaje: snapshot.data.docs[0]['value'] , color: Colors.blue[800],);
+                }
+              )),
+          
+          Container(
+            child: AppBar(
+              backgroundColor: Colors.white,
+              leading: ElevatedButton(
+                // style: ButtonStyle(foregroundColor: Colors.red),
+                onPressed: ()=>Text('hola'),
+                child: Icon(Icons.calendar_today, color: Colors.blue[800],)),
+            )
+              
+            )],
+        )
           ,
-      
+      Tareas(),
       ],)
     );
     

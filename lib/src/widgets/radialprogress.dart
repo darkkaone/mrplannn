@@ -246,12 +246,14 @@ TextEditingController todoTitleController = TextEditingController();
       final _screensize = MediaQuery.of(context).size;
       return Container(
         alignment: Alignment.bottomCenter, child: Container(
-    height: _screensize.height * 0.65, 
+    height: _screensize.height * 0.56, 
     width: double.infinity,
     child: Stack(
       children: [
+        
         Todolist(),
-        Appbar()
+        Appbar(),
+        
       ],
     ),)
     );

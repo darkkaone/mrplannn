@@ -1,3 +1,5 @@
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mrplan/loading.dart';
 import 'package:mrplan/services/database_services.dart';
@@ -18,7 +20,7 @@ class Todolist extends StatefulWidget {
 class _TodolistState extends State<Todolist> {
 
 
-      bool isComplet = false;
+
 
       TextEditingController todoTitleController = TextEditingController();
   @override
@@ -52,7 +54,6 @@ if(todos.length == 0){
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 20),
                   Expanded(
                     child: ListView.separated(
                       
@@ -72,49 +73,54 @@ if(todos.length == 0){
                         
                         },
                         
-                        child: ListTile(
-                          onTap: (){
-                            isComplet = !isComplet;
-if(isComplet)
-                            DatabaseService().completTask(todos[index].uid);
-             else DatabaseService().uncompletTask(todos[index].uid);               
+                        child: StreamBuilder<DocumentSnapshot>(
+                          stream: FirebaseFirestore.instance.collection('Todos').doc().snapshots(),
+                          builder: (context, snapshot) {
+                            var todoss = snapshot.data;
+                            return ListTile(
+                              onTap: (){
+                                isComplet = !isComplet;
+               if (Todo().isComplet = true)
+               {DatabaseService().completTask(todos[index].uid);}
+               if (Todo().isComplet = false)
+               {DatabaseService().uncompletTask(todos[index].uid);}}, 
+               
                               
-                            },
+                              leading: Container(
+                                padding: EdgeInsets.all(2),
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  shape: BoxShape.circle
+                                ),
+                                child: todos[index].isComplet
+                                ? Icon(
+                                  Icons.check, 
+                                  color: Colors.white,)
+                                  : Container(),
+                              ),
+                              title: Text(
+                                todos[index].title,
+                                 
+                              style: todos[index].isComplet 
+                              ? TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                
+                                decoration: TextDecoration.lineThrough,
+                                decorationColor: Colors.red,
+                                )
+                              : TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                
+                                decoration: null
+                                ) 
+                              ),
 
-                          
-                          leading: Container(
-                            padding: EdgeInsets.all(2),
-                            height: 30,
-                            width: 30,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              shape: BoxShape.circle
-                            ),
-                            child: todos[index].isComplet
-                            ? Icon(
-                              Icons.check, 
-                              color: Colors.white,)
-                              : Container(),
-                          ),
-                          title: Text(
-                            todos[index].title,
-                             
-                          style: todos[index].isComplet 
-                          ? TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            
-                            decoration: TextDecoration.lineThrough,
-                            decorationColor: Colors.red,
-                            )
-                          : TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            
-                            decoration: null
-                            ) 
-                          ),
-
+                            );
+                          }
                         ),
                       );
                     }
