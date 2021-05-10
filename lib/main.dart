@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mrplan/loading.dart';
+import 'package:mrplan/screens/calendar_page.dart';
 
 
 import 'package:mrplan/src/bloc/provider.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    final prefs = new PreferenciasUsuario();
+
     
     return FutureBuilder(
       future: Firebase.initializeApp(),
@@ -41,12 +42,13 @@ class MyApp extends StatelessWidget {
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Material App',
-            initialRoute: 'graficas',
+            initialRoute: 'calendar',
             routes: {
               'login'    : ( BuildContext context ) => LoginPage(),
               'registro' : ( BuildContext context ) => RegistroPage(),
               'graficas' : ( BuildContext context ) => GraficasCirculares(),
-              'todolist' : ( BuildContext context ) => Todolist()
+              'todolist' : ( BuildContext context ) => Todolist(),
+              'calendar' : (BuildContext context ) => CalendarPage()
             },
             theme: ThemeData(
               primaryColor: Colors.blue[800],

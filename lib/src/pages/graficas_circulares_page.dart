@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mrplan/services/database_services.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:mrplan/src/models/todo.dart';
-import 'package:mrplan/src/pages/todolist.dart';
-import 'package:mrplan/src/widgets/appbar.dart';
 import 'package:mrplan/src/widgets/radialprogress.dart';
+
 class GraficasCirculares extends StatefulWidget {
 
   @override
@@ -13,10 +13,17 @@ class GraficasCirculares extends StatefulWidget {
 
 class _GraficasCircularesState extends State<GraficasCirculares> {
  
-
+@override
+void initState() { 
+  super.initState();
+  initializeDateFormatting();
+}
   @override
   Widget build(BuildContext context) {
-    
+    Intl.defaultLocale = "es_ES";
+    var now = new DateTime.now();
+    var formatter = new DateFormat.EEEE().addPattern(',').add_yMMMMd();
+    String formattedDate = formatter.format(now);
 setState(() {
   
 });  
@@ -58,16 +65,19 @@ setState(() {
                 }
               )),
           
-          Container(
-            child: AppBar(
-              backgroundColor: Colors.white,
-              leading: ElevatedButton(
-                // style: ButtonStyle(foregroundColor: Colors.red),
-                onPressed: ()=>Text('hola'),
-                child: Icon(Icons.calendar_today, color: Colors.blue[800],)),
-            )
-              
-            )],
+          AppBar(
+            title: Text(formattedDate, style: TextStyle(color: Colors.black),),
+            elevation: 0,
+            backgroundColor: Colors.white,
+            leading: ElevatedButton(
+              style: ButtonStyle(backgroundColor:MaterialStateProperty.resolveWith<Color>(
+      (Set<MaterialState> states) {
+        return Colors.white; // Use the component's default.
+      },
+    ),),
+              onPressed: ()=>Navigator.pushNamed(context, 'calendar'),
+              child: Icon(Icons.calendar_today, color: Colors.blue[800],)),
+          )],
         )
           ,
       Tareas(),
