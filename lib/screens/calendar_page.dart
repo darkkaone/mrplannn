@@ -1,25 +1,35 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:mrplan/src/pages/labs/calendrar_strip.dart';
 import 'package:mrplan/theme/colors/light_colors.dart';
 import 'package:mrplan/widgets/back_button.dart';
 import 'package:mrplan/widgets/task_container.dart';
 import 'dart:io';
 
+import 'package:table_calendar/table_calendar.dart';
+CalendarController calendarcontrollera = CalendarController();
 class CalendarPage extends StatefulWidget {
+    final DateTime selectedDate;
+
+  const CalendarPage({Key key, this.selectedDate}) : super(key: key);
   @override
   _CalendarPageState createState() => _CalendarPageState();
 }
 
   int _currentIndex = 0;
   int newIndex = 100+_currentIndex-99;
+  RouteSettings routeSettings = routeSettings.arguments;
+  
+  
+
 
 class _CalendarPageState extends State<CalendarPage> {
   
 
+  PageController pageController = PageController(initialPage: _currentIndex,
   );
 @override
 void initState() { 
@@ -36,7 +46,7 @@ void dispose(){
 
   @override
   Widget build(BuildContext context) {
-
+final _formkey = GlobalKey<FormBuilderState>();
     Intl.defaultLocale = "es_ES";
     var now = new DateTime.now();
     var formatter1 = new DateFormat.yMMMM();
@@ -44,18 +54,21 @@ void dispose(){
     // var formatter3 = new DateFormat.M();
     String formattedDate = formatter1.format(now);
     String formattedDate2 = formatter2.format(now);
-    // String mes = formatter3.format(now);
-    // String dias = DateFormat.E().format(now);
     stdout.writeln("Enter month number");
-    // DateTime selectedvalue = DateTime.now();
     List<DateTime> markedDates = [
-    // DateTime.now().subtract(Duration(days: _currentIndex)),
-    // DateTime.now().subtract(Duration(days: _currentIndex)),
     DateTime.now().add(Duration(days:_currentIndex))
   ];
     
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: (){
+       Navigator.pushNamed(context, dialogo,
+       arguments: calendarcontrollera.selectedDay);
+       
+       },
+      ),
       
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -104,19 +117,8 @@ void dispose(){
                 ),
               ),
               SizedBox(height: 20.0),
-              
-             CalendarStrip(
-               startDate: DateTime.now(),
-               endDate: DateTime.now().add(Duration(days: 365)),
-               dateTileBuilder: dateTileBuilder,
-               iconColor: Colors.black87,
-               monthNameWidget: monthNameWidget,
-               markedDates: markedDates,
-               containerDecoration: BoxDecoration(color: Colors.white70),
-                onDateSelected: onselected,
-                onWeekSelected: onWeekSelect,
-             ),
-             
+              CalendarPage1(),
+
 BottomNavigationBar(
   currentIndex: _currentIndex,
   
@@ -214,69 +216,158 @@ onTap: (index){
                     
   }
 }
+dialogo(context){
+  showDialog(
+            routeSettings: routeSettings,
+            context: context,
+             
+          builder: (_)=> SimpleDialog(
+            
+            title: Row(children: [
+              Text("Nueva Tarea"),
+              Spacer(),
+              IconButton(
+                icon: Icon(Icons.cancel), 
+                onPressed: ()=> Navigator.pop(context)),
+            ],),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)
+            ),
+            children: [
+                            FormBuilder(
+                child: Column(children: [
+                            FormBuilderTextField(name: "title",
+                            decoration: InputDecoration(
+                              hintText: "Add Title",
+                              border: InputBorder.none,
+                              contentPadding: const EdgeInsets.only(left: 48.0)
+                            ),
+                            ),
+                            Divider(),
+                            FormBuilderTextField(name: "description",
+                            maxLines: 5,
+                            minLines: 1,
+                            decoration: 
+                            InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "Add Details",
+                              prefixIcon: Icon(Icons.short_text),
+                              ),
+                              ),
+                              Divider(),
+                              FormBuilderDateTimePicker(
+                                name: "date", 
+                                initialValue: selectedDate ?? DateTime.now(),
+                                fieldHintText: "Add Date",
+                                inputType: InputType.date,
+                                format: DateFormat('EEEE, dd MMMM, yyyy'),
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  prefixIcon: Icon(Icons.calendar_today_sharp),
+                                )
+                                )
+                ,
 
-dateTileBuilder(date, selectedDate, rowIndex, dayName, isDateMarked, isDateOutOfRange) {
-    bool isSelectedDate = date.compareTo(selectedDate) == 0;
-    Color fontColor = isDateOutOfRange ? Colors.black26 : Colors.black87;
-    TextStyle normalStyle = TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: fontColor);
-    TextStyle selectedStyle = TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.black87);
-    TextStyle dayNameStyle = TextStyle(fontSize: 14.5, color: fontColor);
-    List<Widget> _children = [
-      Text(dayName, style: dayNameStyle),
-      Text(date.day.toString(), style: !isSelectedDate ? normalStyle : selectedStyle),
-    ];
+                ],)),
+            ],
 
-    if (isDateMarked == true) {
-      _children.add(getMarkedIndicatorWidget());
+          ));
+}
+class CalendarPage1 extends StatefulWidget {
+  @override
+  _CalendarPage1State createState() => _CalendarPage1State();
+}
+
+class _CalendarPage1State extends State<CalendarPage1> {
+
+   Widget build(BuildContext context) {
+     
+      return Center(
+            child: Container(
+              child: 
+              SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Card(
+                clipBehavior: Clip.antiAlias,
+                margin: const EdgeInsets.all(8.0),
+                child: TableCalendar(
+                  calendarController: calendarcontrollera,
+                  availableCalendarFormats: const{
+                    CalendarFormat.month: 'mes',
+                    CalendarFormat.week: 'semana',
+                    CalendarFormat.twoWeeks: 'dos semanas'
+                  },
+                  initialCalendarFormat: CalendarFormat.week,
+                  calendarStyle: CalendarStyle(
+                    todayColor: Colors.blue[800],
+                    selectedColor: Colors.grey,
+                    todayStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0
+                    )
+                  ),
+                  headerStyle: HeaderStyle(
+                    formatButtonVisible: false,
+                    formatButtonPadding: EdgeInsets.symmetric(horizontal: 0.0),
+                    formatButtonTextStyle: TextStyle(
+                      locale: Locale('fr', 'CH')
+                    ),
+                    centerHeaderTitle: true,
+                    formatButtonDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0)
+                    )
+                    ),
+                    startingDayOfWeek: StartingDayOfWeek.monday,
+                    onDaySelected: (date, events, eventos){
+                      print(date.toIso8601String());
+                    },
+                    builders: CalendarBuilders(
+                      selectedDayBuilder: (context,date, events) => 
+                      Container(
+                        margin: const EdgeInsets.all(4.0),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          shape: BoxShape.circle,),
+                        child: Text
+                        (date.day.toString(), style: TextStyle(
+                          color: Colors.white
+                        )),
+                        
+
+
+                      ),
+                      todayDayBuilder: (context, date, events)=>
+                      Container(
+                        margin: const EdgeInsets.all(4.0),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          shape: BoxShape.circle,),
+                        child: Text
+                        (date.day.toString(), style: TextStyle(
+                          color: Colors.white
+                        )),
+                    ),
+                  
+                ),
+    ),
+              )
+              
+              ,]
+              )
+              )
+              
+              )
+              );
+            
+          
+        
+      
     }
-
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 150),
-      alignment: Alignment.center,
-      padding: EdgeInsets.only(top: 8, left: 5, right: 5, bottom: 5),
-      decoration: BoxDecoration(
-        color: !isSelectedDate ? Colors.transparent : Colors.white70,
-        borderRadius: BorderRadius.all(Radius.circular(60)),
-      ),
-      child: Column(
-        children: _children,
-      ),
-    );
+    
   }
-
-  getMarkedIndicatorWidget() {
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Container(
-        margin: EdgeInsets.only(left: 1, right: 1),
-        width: 7,
-        height: 7,
-        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
-      ),
-      Container(
-        width: 7,
-        height: 7,
-        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.blue),
-      )
-    ]);
-  }
-
-  monthNameWidget(monthName) {
-    return Container(
-      child: Text(monthName,
-          style:
-              TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: Colors.black87, fontStyle: FontStyle.italic)),
-      padding: EdgeInsets.only(top: 8, bottom: 4),
-    );
-  }
-  
-  onWeekSelect(data) {
-    print("Selected week starting at -> $data");
-  }
-
-  onselected(index){
-    final pageController = PageController(initialPage: _currentIndex);
-
-  pageController.animateToPage(newIndex, duration: (Duration(milliseconds: 500)), curve: Curves.ease);
-
-            newIndex = _currentIndex;
-  }
+   
+          
+        
