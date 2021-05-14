@@ -35,7 +35,7 @@ class DatabaseService{
       "isComplet": true
     });
     if (porcentaje > 0){
-       percentcollection.doc('percentage').update({
+       await percentcollection.doc('percentage').update({
          "value": porcentaje -= 10
        });
     }else{ 
@@ -58,7 +58,7 @@ class DatabaseService{
   await todosCollection.doc(uid).delete();
   if (porcentaje > 0){
     if (snapshot.data()['isComplet'] == false)
-    percentcollection.doc('percentage').update({
+    await percentcollection.doc('percentage').update({
 
 "value": porcentaje - 10
     });

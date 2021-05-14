@@ -52,7 +52,7 @@ class LoginPage extends StatelessWidget {
             ),
             child: Column(
               children: <Widget>[
-                Text('Ingreso', style: TextStyle(fontSize: 20.0)),
+                Text('Login', style: TextStyle(fontSize: 20.0)),
                 SizedBox( height: 60.0 ),
                 _crearEmail( bloc ),
                 SizedBox( height: 30.0 ),
@@ -85,7 +85,7 @@ class LoginPage extends StatelessWidget {
         child: TextField(
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
-            icon: Icon( Icons.alternate_email, color: Colors.deepPurple ),
+            icon: Icon( Icons.alternate_email, color: Colors.blue[800] ),
             hintText: 'ejemplo@correo.com',
             labelText: 'Correo electrónico',
             counterText: snapshot.data,
@@ -115,7 +115,7 @@ class LoginPage extends StatelessWidget {
           child: TextField(
             obscureText: true,
             decoration: InputDecoration(
-              icon: Icon( Icons.lock_outline, color: Colors.deepPurple ),
+              icon: Icon( Icons.lock_outline, color: Colors.blue[800] ),
               labelText: 'Contraseña',
               counterText: snapshot.data,
               errorText: snapshot.error
@@ -144,13 +144,13 @@ class LoginPage extends StatelessWidget {
         return RaisedButton(
           child: Container(
             padding: EdgeInsets.symmetric( horizontal: 80.0, vertical: 15.0),
-            child: Text('Ingresar'),
+            child: Text('Entrar'),
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5.0)
           ),
           elevation: 0.0,
-          color: Colors.deepPurple,
+          color: Colors.blue[800],
           textColor: Colors.white,
           onPressed: snapshot.hasData ? ()=> _login(bloc, context) : null
         );
@@ -181,39 +181,26 @@ if (info['ok']){
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: <Color> [
-            Colors.yellow,
+            Colors.blue[800],
             Colors.blue
           ]
         )
       ),
     );
 
-    final circulo = Container(
-      width: 100.0,
-      height: 100.0,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100.0),
-        color: Color.fromRGBO(255, 255, 255, 0.05)
-      ),
-    );
+    
 
 
     return Stack(
       children: <Widget>[
         fondoModaro,
-        Positioned( top: 90.0, left: 30.0, child: circulo ),
-        Positioned( top: -40.0, right: -30.0, child: circulo ),
-        Positioned( bottom: -50.0, right: -10.0, child: circulo ),
-        Positioned( bottom: 120.0, right: 20.0, child: circulo ),
-        Positioned( bottom: -50.0, left: -20.0, child: circulo ),
-        
         Container(
           padding: EdgeInsets.only(top: 80.0),
           child: Column(
             children: <Widget>[
-              Icon( Icons.person_pin_circle, color: Colors.white, size: 100.0 ),
+              Icon( Icons.login, color: Colors.white, size: 100.0 ),
               SizedBox( height: 10.0, width: double.infinity ),
-              Text('Usuario', style: TextStyle( color: Colors.white, fontSize: 25.0 ))
+              Text('Bienvenido a Mr. Plan!', style: TextStyle( color: Colors.white, fontSize: 25.0 ))
             ],
           ),
         )

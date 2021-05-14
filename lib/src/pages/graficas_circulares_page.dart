@@ -33,7 +33,21 @@ setState(() {
       
 
       
-      appBar: AppBar(elevation: 0, backgroundColor: Colors.white, toolbarHeight: 35, title: Center(child: Text('Mr. Plan', textAlign: TextAlign.center, style: TextStyle(color: Colors.black)))),
+      appBar: AppBar(
+        leading: IconButton(icon: Icon(Icons.logout, color: Colors.black,), onPressed: ()=>Navigator.popAndPushNamed(context, 'login')),
+        actions: <Widget>[IconButton(
+          icon: Icon(Icons.delete),
+          onPressed: null,
+        )],
+        elevation: 0, 
+        backgroundColor: Colors.white, 
+        toolbarHeight: 35, 
+        title: Center(
+          child: Text('Mr. Plan', 
+          textAlign: TextAlign.center, 
+          style: TextStyle(
+            fontFamily: 'Jocham',
+            color: Colors.black)))),
       
       body: Stack (children: [
 
@@ -66,7 +80,7 @@ setState(() {
               )),
           
           AppBar(
-            title: Text(formattedDate, style: TextStyle(color: Colors.black),),
+            title: Text(formattedDate, style: TextStyle(fontWeight: FontWeight.w300, fontStyle: FontStyle.normal, color: Colors.black, fontSize: 20),),
             elevation: 0,
             backgroundColor: Colors.white,
             leading: ElevatedButton(
@@ -75,7 +89,9 @@ setState(() {
         return Colors.white; // Use the component's default.
       },
     ),),
-              onPressed: ()=>Navigator.pushNamed(context, 'calendar'),
+              onPressed: ()=> null
+              // Navigator.pushNamed(context, 'calendar')
+              ,
               child: Icon(Icons.calendar_today, color: Colors.blue[800],)),
           )],
         )

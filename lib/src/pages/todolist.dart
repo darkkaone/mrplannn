@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mrplan/loading.dart';
 import 'package:mrplan/services/database_services.dart';
 import 'package:mrplan/src/models/todo.dart';
+import 'package:mrplan/src/pages/graficas_circulares_page.dart';
 import 'package:mrplan/src/widgets/functions.dart';
 
 
@@ -43,7 +44,10 @@ setState(() {
               List<Todo> todos = snapshot.data;
                
 if(todos.length == 0){
-              return Center(child: Text('No hay tareas agregadas!'));
+              return Center(child: Text(
+                'No hay tareas agregadas!',
+                style: TextStyle(fontWeight: FontWeight.w300, fontStyle: FontStyle.normal, color: Colors.black, fontSize: 17),)
+              );
               
                
             }
@@ -68,6 +72,9 @@ if(todos.length == 0){
                         color: Colors.red),
                         onDismissed: (direction) async {
                           await DatabaseService().removeTodo(todos[index].uid);
+                          if (Todo().isComplet = false){
+                          porcentaje = porcentaje -= 10;}
+                          else{return;}
                         },
                         
                         child: StreamBuilder<DocumentSnapshot>(
@@ -180,7 +187,7 @@ class _AppbarState extends State<Appbar> {
                          controller: todoTitleController,
                          autofocus: true,
                          decoration: InputDecoration(
-                           hintStyle: TextStyle(color: Colors.blue[800]),
+                           hintStyle: TextStyle(fontWeight: FontWeight.w400, fontStyle: FontStyle.normal, color: Colors.blue[800]),
                          hintText: "Inserte una tarea...",
                          border: InputBorder.none
                          ),
