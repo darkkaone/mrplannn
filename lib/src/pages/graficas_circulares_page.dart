@@ -126,7 +126,7 @@ class _CustomRadialProgressState extends State<CustomRadialProgress> {
 
   
   
-  dynamic porcentaje = 0;
+  int porcentaje = 0;
   int nuevoPorcentaje = 0;
   int valorinicial = 0;
   int nuevovalorinicial = 0;

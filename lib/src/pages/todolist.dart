@@ -68,21 +68,18 @@ if(todos.length == 0){
                         color: Colors.red),
                         onDismissed: (direction) async {
                           await DatabaseService().removeTodo(todos[index].uid);
-                        quitar();
-                        
                         },
                         
                         child: StreamBuilder<DocumentSnapshot>(
                           stream: FirebaseFirestore.instance.collection('Todos').doc().snapshots(),
                           builder: (context, snapshot) {
-                            var todoss = snapshot.data;
                             return ListTile(
                               onTap: (){
                                 isComplet = !isComplet;
-               if (Todo().isComplet = true)
-               {DatabaseService().completTask(todos[index].uid);}
-               if (Todo().isComplet = false)
-               {DatabaseService().uncompletTask(todos[index].uid);}}, 
+                                if (Todo().isComplet = true)
+                                {DatabaseService().completTask(todos[index].uid);}
+                                if (Todo().isComplet = false)
+                                {DatabaseService().uncompletTask(todos[index].uid);}}, 
                
                               
                               leading: Container(

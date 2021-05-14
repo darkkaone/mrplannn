@@ -29,7 +29,7 @@ class DatabaseService{
   Future completTask(String uid) async {
   DocumentSnapshot snapshot = await todosCollection.doc(uid).get();
   if (snapshot.data()['isComplet'] == true) {
-    return;
+    return uncompletTask(uid);
   } else {
     await todosCollection.doc(uid).update({
       "isComplet": true
@@ -54,12 +54,15 @@ class DatabaseService{
 
 
   Future removeTodo(uid) async {
+     DocumentSnapshot snapshot = await todosCollection.doc(uid).get();
   await todosCollection.doc(uid).delete();
   if (porcentaje > 0){
+    if (snapshot.data()['isComplet'] == false)
     percentcollection.doc('percentage').update({
 
 "value": porcentaje - 10
-    });}else{porcentaje = 0;}
+    });
+    }else{porcentaje = 0;}
  
   }
 
