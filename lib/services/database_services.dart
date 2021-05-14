@@ -17,7 +17,6 @@ class DatabaseService{
     await todosCollection.add({
       "title":title,
       "isComplet": false,
-      "ivalue": 10,
     });
 
     await percentcollection.doc('percentage').update({
@@ -27,17 +26,23 @@ class DatabaseService{
   }
     
     
-  Future completTask(uid) async {
+  Future completTask(String uid) async {
+  DocumentSnapshot snapshot = await todosCollection.doc(uid).get();
+  if (snapshot.data()['isComplet'] == true) {
+    return;
+  } else {
     await todosCollection.doc(uid).update({
       "isComplet": true
-            });
-            if (porcentaje > 0){
-    percentcollection.doc('percentage').update({
-
-"value": porcentaje -= 10
-    });}else{porcentaje = 0;}
-
+    });
+    if (porcentaje > 0){
+       percentcollection.doc('percentage').update({
+         "value": porcentaje -= 10
+       });
+    }else{ 
+       porcentaje = 0;
+    }
   }
+}
   Future uncompletTask(uid) async {
     await todosCollection.doc(uid).update({"isComplet": false});
 

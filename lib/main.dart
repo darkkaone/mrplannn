@@ -5,6 +5,7 @@ import 'package:mrplan/screens/calendar_page.dart';
 
 
 import 'package:mrplan/src/bloc/provider.dart';
+import 'package:mrplan/src/pages/dialogo_page.dart';
 import 'package:mrplan/src/pages/graficas_circulares_page.dart';
 import 'package:mrplan/src/pages/labs/login_page.dart';
 import 'package:mrplan/src/pages/registro_page.dart';
@@ -42,13 +43,14 @@ class MyApp extends StatelessWidget {
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Material App',
-            initialRoute: 'calendar',
+            initialRoute: 'graficas',
             routes: {
               'login'    : ( BuildContext context ) => LoginPage(),
               'registro' : ( BuildContext context ) => RegistroPage(),
               'graficas' : ( BuildContext context ) => GraficasCirculares(),
               'todolist' : ( BuildContext context ) => Todolist(),
-              'calendar' : (BuildContext context ) => CalendarPage()
+              'calendar' : (BuildContext context ) => CalendarPage(),
+              'dialogo' : (BuildContext context ) => DialogoPage()
             },
             theme: ThemeData(
               primaryColor: Colors.blue[800],

@@ -4,7 +4,8 @@ import 'package:countup/countup.dart';
 import 'package:flutter/material.dart';
 import 'package:mrplan/src/pages/graficas_circulares_page.dart';
 import 'package:mrplan/src/pages/todolist.dart';
-import 'package:mrplan/src/widgets/appbar.dart';
+
+import 'functions.dart';
 
 
 class RadialProgress extends StatefulWidget {
