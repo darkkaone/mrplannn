@@ -44,6 +44,7 @@ setState(() {
               List<Todo> todos = snapshot.data;
                
 if(todos.length == 0){
+  DatabaseService().notareas();
               return Center(child: Text(
                 'No hay tareas agregadas!',
                 style: TextStyle(fontWeight: FontWeight.w300, fontStyle: FontStyle.normal, color: Colors.black, fontSize: 17),)

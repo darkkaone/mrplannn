@@ -52,6 +52,17 @@ class DatabaseService{
     });
   }
 
+  Future notareas() async {
+    DocumentSnapshot snapshot = await todosCollection.doc().get();
+    if(snapshot.data() == null){
+      await percentcollection.doc('percentage').update({
+
+"value": porcentaje = 0
+    });
+    }else{}
+  }
+
+
 
   Future removeTodo(uid) async {
      DocumentSnapshot snapshot = await todosCollection.doc(uid).get();

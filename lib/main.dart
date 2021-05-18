@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Material App',
-            initialRoute: 'login',
+            initialRoute: 'graficas',
             routes: {
               'login'    : ( BuildContext context ) => LoginPage(),
               'registro' : ( BuildContext context ) => RegistroPage(),
